@@ -8,5 +8,11 @@
   "action": {
     "default_title": "Activité Manuelle",
     "default_popup": "popup.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.helloasso.com/associations/*"],
+      "js": ["booking.js"]
+    }
+  ]
 }
