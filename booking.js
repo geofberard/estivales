@@ -25,10 +25,25 @@ function detectElement(selector, callback) {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+function priceTabAutomation() {
+    log("Etape Choix des billets");
+    detectElement('[data-test="button-plus"]', (addButton) => {
+        log("Calleback Called");
+        if(addButton) {
+            log("Generating Click");
+            addButton.click();
+    
+            detectElement('[data-test="button-next-step"]:not(.ValidatingButton)', (nextStep) => {
+                nextStep.click();
+            });
+        }
+    });
+}
+
 log("Initializing Plugin");
 
 detectElement('[data-testid="tab-prices"].NavStep.NavStep-Current', (addButton) => {
-    log("Etape Choix des billets");
+    priceTabAutomation();
 });
 
 detectElement('[data-testid="tab-members"].NavStep.NavStep-Current', (addButton) => {
