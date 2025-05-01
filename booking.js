@@ -40,20 +40,29 @@ function priceTabAutomation() {
     });
 }
 
+function sendNotification() {
+    log("Trying notification")
+    chrome.runtime.sendMessage({ action: "send-notification" });
+}
+
 log("Initializing Plugin");
 
 detectElement('[data-testid="tab-prices"].NavStep.NavStep-Current', (addButton) => {
+    sendNotification();
     priceTabAutomation();
 });
 
 detectElement('[data-testid="tab-members"].NavStep.NavStep-Current', (addButton) => {
+    sendNotification();
     log("Etape Participants");
 });
 
 detectElement('[data-testid="tab-payer"].NavStep.NavStep-Current', (addButton) => {
+    sendNotification();
     log("Etape Coordonnées");
 });
 
 detectElement('[data-testid="tab-summary"].NavStep.NavStep-Current', (addButton) => {
+    sendNotification();
     log("Etape Récapitulatif");
 });
