@@ -27,7 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const selectedIndex = parseInt(tournamentSelector.value, 10);
         const tournament = tournaments[selectedIndex];
         if (tournament) {
-            chrome.tabs.create({ url: baseUrl + tournament.url });
+            chrome.tabs.create({url: baseUrl + tournament.url});
         }
     });
+});
+
+chrome.storage.local.get({ USER_NAME: 'john' }, (result) => {
+    const userName = result.USER_NAME;
+    document.getElementById('greeting').textContent = `Bonjour ${userName}`;
 });
