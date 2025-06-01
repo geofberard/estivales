@@ -28,64 +28,123 @@ function log(level, stepName, message) {
 }
 
 function sendNotification() {
-    chrome.runtime.sendMessage({ action: "send-notification" });
+    chrome.runtime.sendMessage({action: "send-notification"});
 }
 
 function detectElement(selector, callback) {
     const element = document.querySelector(selector);
     if (element) {
-      callback(element);
-      return;
+        callback(element);
+        return;
     }
 
     const observer = new MutationObserver(() => {
-      const newElement = document.querySelector(selector);
-      if (newElement) {
-        callback(newElement);
-        observer.disconnect();
-      }
+        const newElement = document.querySelector(selector);
+        if (newElement) {
+            callback(newElement);
+            observer.disconnect();
+        }
     });
-  
-    observer.observe(document.body, { childList: true, subtree: true });
+
+    observer.observe(document.body, {childList: true, subtree: true});
 }
 
-log("Initializing Plugin");
+function clickButtonUntilStepChanges({
+                                         currentStep,
+                                         currentStepSelector,
+                                         buttonSelector,
+                                         intervalMs = 1000
+                                     }) {
+    log("Info", currentStep, `Clicking next`);
+    const targetButton = document.querySelector(buttonSelector);
+    if (targetButton) {
+        targetButton.click();
+    }
+
+
+    let intervalId = null;
+
+    const observer = new MutationObserver(() => {
+        if (!document.querySelector(currentStepSelector)) {
+            log("Info", currentStep, "Step changed, stopping retries on next");
+            clearInterval(intervalId);
+            observer.disconnect();
+        }
+    });
+
+    observer.observe(document.body, {childList: true, subtree: true});
+
+    intervalId = setInterval(() => {
+        const targetButton = document.querySelector(buttonSelector);
+        if (targetButton) {
+            log("Info", currentStep, `Retry : Clicking next`);
+            targetButton.click();
+        } else {
+            log("Info", currentStep, `Retry : Cannot find button`);
+        }
+    }, intervalMs);
+}
 
 let SELECTOR_STEP_1_TICKETS = '[data-testid="tab-prices"].NavStep.NavStep-Current';
 let SELECTOR_STEP_2_MEMBERS = '[data-testid="tab-members"].NavStep.NavStep-Current';
 let SELECTOR_STEP_3_CONTACT = '[data-testid="tab-payer"].NavStep.NavStep-Current';
 let SELECTOR_STEP_4_SUMMARY = '[data-testid="tab-summary"].NavStep.NavStep-Current';
 let SELECTOR_NEXT_BUTTON = '[data-test="button-next-step"]:not(.ValidatingButton)';
+let SELECTOR_TICKET_QUANTITY = '[data-test="input-quantity"]';
+let SELECTOR_ADD_TICKET = '[data-test="button-plus"]';
 
 log("Info", "Tickets", "Waiting");
-detectElement(SELECTOR_STEP_1_TICKETS, (addButton) => {
+detectElement(SELECTOR_STEP_1_TICKETS, () => {
     log("Info", "Tickets", "Detected");
-    detectElement('[data-test="button-plus"]', (addButton) => {
-        if(addButton) {
-            log("Info", "Tickets", "Adding to cart");
-            addButton.click();
 
-            detectElement(SELECTOR_NEXT_BUTTON, (nextStep) => {
-                log("Info", "Tickets", "Proceeding to next step");
-                nextStep.click();
-            });
+    detectElement(SELECTOR_TICKET_QUANTITY, (ticket_quantity) => {
+        log("Info", "Tickets", `Number of tickets in the cart : ${ticket_quantity.value}`);
+        if (ticket_quantity.value !== "1") {
+
+            const addButton = document.querySelector(SELECTOR_ADD_TICKET);
+            if (addButton) {
+                log("Info", "Tickets", "Adding on ticket to cart");
+                addButton.click();
+
+
+            } else {
+                log("Err", "Tickets", "Cannot add ticket to cart");
+            }
         }
+        else {
+            log("Info", "Tickets", "No more ticket required");
+        }
+
+        clickButtonUntilStepChanges({
+            currentStep: "Tickets",
+            currentStepSelector: SELECTOR_STEP_1_TICKETS,
+            buttonSelector: SELECTOR_NEXT_BUTTON
+        });
     });
 });
 
-log("Info", "Team", "Waiting");
-detectElement(SELECTOR_STEP_2_MEMBERS, (addButton) => {
-    log("Info", "Team", "Detected");
-    sendNotification();
-});
-
-log("Info", "Contact", "Waiting");
-detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
-    log("Info", "Contact", "Detected");
-    sendNotification()
-});
-
-log("Info", "Summary", "Waiting");
-detectElement(SELECTOR_STEP_4_SUMMARY, (addButton) => {
-    log("Info", "Summary", "Detected");
-});
+// log("Info", "Team", "Waiting");
+// detectElement(SELECTOR_STEP_2_MEMBERS, () => {
+//     log("Info", "Team", "Detected");
+//     clickButtonUntilStepChanges({
+//         currentStep: "Team",
+//         currentStepSelector: SELECTOR_STEP_2_MEMBERS,
+//         buttonSelector: SELECTOR_NEXT_BUTTON
+//     });
+//     sendNotification();
+// });
+//
+// log("Info", "Contact", "Waiting");
+// detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
+//     log("Info", "Contact", "Detected");
+//     clickButtonUntilStepChanges({
+//         currentStep: "Contact",
+//         currentStepSelector: SELECTOR_STEP_3_CONTACT,
+//         buttonSelector: SELECTOR_NEXT_BUTTON
+//     });
+// });
+//
+// log("Info", "Summary", "Waiting");
+// detectElement(SELECTOR_STEP_4_SUMMARY, (addButton) => {
+//     log("Info", "Summary", "Detected");
+// });
