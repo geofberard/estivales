@@ -56,10 +56,11 @@ function clickButtonUntilStepChanges({
                                          intervalMs = 1000
                                      }) {
     log("Info", currentStep, `Clicking next`);
-    const targetButton = document.querySelector(buttonSelector);
-    if (targetButton) {
-        targetButton.click();
-    }
+    // Peut-être décommenté pour essayer de shortcut les validations de champs dans une page
+    //const targetButton = document.querySelector(buttonSelector);
+    // if (targetButton) {
+    //     targetButton.click();
+    // }
 
 
     let intervalId = null;
@@ -89,9 +90,12 @@ let SELECTOR_STEP_1_TICKETS = '[data-testid="tab-prices"].NavStep.NavStep-Curren
 let SELECTOR_STEP_2_MEMBERS = '[data-testid="tab-members"].NavStep.NavStep-Current';
 let SELECTOR_STEP_3_CONTACT = '[data-testid="tab-payer"].NavStep.NavStep-Current';
 let SELECTOR_STEP_4_SUMMARY = '[data-testid="tab-summary"].NavStep.NavStep-Current';
-let SELECTOR_NEXT_BUTTON = '[data-test="button-next-step"]:not(.ValidatingButton)';
+let SELECTOR_NEXT_BUTTON = '[data-test="button-next-step"]:not(.ValidatingButton):not([disabled])';
 let SELECTOR_TICKET_QUANTITY = '[data-test="input-quantity"]';
 let SELECTOR_ADD_TICKET = '[data-test="button-plus"]';
+
+// Seems to have a shortcut ... pass to next step without form validation
+//let SELECTOR_NEXT_BUTTON = '[data-test="button-next-step"]:not(.ValidatingButton)';
 
 log("Info", "Tickets", "Waiting");
 detectElement(SELECTOR_STEP_1_TICKETS, () => {
@@ -123,28 +127,28 @@ detectElement(SELECTOR_STEP_1_TICKETS, () => {
     });
 });
 
-// log("Info", "Team", "Waiting");
-// detectElement(SELECTOR_STEP_2_MEMBERS, () => {
-//     log("Info", "Team", "Detected");
-//     clickButtonUntilStepChanges({
-//         currentStep: "Team",
-//         currentStepSelector: SELECTOR_STEP_2_MEMBERS,
-//         buttonSelector: SELECTOR_NEXT_BUTTON
-//     });
-//     sendNotification();
-// });
-//
-// log("Info", "Contact", "Waiting");
-// detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
-//     log("Info", "Contact", "Detected");
-//     clickButtonUntilStepChanges({
-//         currentStep: "Contact",
-//         currentStepSelector: SELECTOR_STEP_3_CONTACT,
-//         buttonSelector: SELECTOR_NEXT_BUTTON
-//     });
-// });
-//
-// log("Info", "Summary", "Waiting");
-// detectElement(SELECTOR_STEP_4_SUMMARY, (addButton) => {
-//     log("Info", "Summary", "Detected");
-// });
+log("Info", "Team", "Waiting");
+detectElement(SELECTOR_STEP_2_MEMBERS, () => {
+    log("Info", "Team", "Detected");
+    clickButtonUntilStepChanges({
+        currentStep: "Team",
+        currentStepSelector: SELECTOR_STEP_2_MEMBERS,
+        buttonSelector: SELECTOR_NEXT_BUTTON
+    });
+    sendNotification();
+});
+
+log("Info", "Contact", "Waiting");
+detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
+    log("Info", "Contact", "Detected");
+    clickButtonUntilStepChanges({
+        currentStep: "Contact",
+        currentStepSelector: SELECTOR_STEP_3_CONTACT,
+        buttonSelector: SELECTOR_NEXT_BUTTON
+    });
+});
+
+log("Info", "Summary", "Waiting");
+detectElement(SELECTOR_STEP_4_SUMMARY, (addButton) => {
+    log("Info", "Summary", "Detected");
+});
