@@ -13,7 +13,7 @@
   "content_scripts": [
     {
       "matches": ["https://www.helloasso.com/associations/*"],
-      "js": ["booking.js"]
+      "js": ["lib/logger.js", "lib/scrapping.js", "booking.js"]
     }
   ],
   "background": {
