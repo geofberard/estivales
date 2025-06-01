@@ -4,13 +4,11 @@ const LEVELS = {
     Error: 'Err'
 };
 
-const PAD_LEVEL = 4;     // Pour aligner [Info], [Error], etc.
-const PAD_STEP = 7;     // Pour aligner les noms d'étapes
+const PAD_STEP = 12;     // Pour aligner les noms d'étapes
 
 function log(level, stepName, message) {
-    const levelStr = `[${level}]`.padEnd(PAD_LEVEL, ' ');
     const stepStr = `${stepName}`.padEnd(PAD_STEP, ' ');
-    const finalMessage = `${levelStr} Estivales - ${stepStr} : ${message}`;
+    const finalMessage = `[Estivales] ${stepStr} : ${message}`;
 
     switch (level) {
         case LEVELS.Info:
@@ -86,78 +84,78 @@ function clickButtonUntilStepChanges({
     }, intervalMs);
 }
 
-function findFieldElement(labelText) {
+function findFieldElement(labelText, failSilently) {
     const label = Array.from(document.querySelectorAll("label"))
         .find((lbl) => lbl.textContent.trim().startsWith(labelText));
 
     if (!label) {
-        log("Warn", labelText, "Label not found");
+        log(failSilently ? "Info" : "Warn", `Form - ${labelText}`, "Label not found");
         return null;
     }
 
     const fieldId = label.getAttribute("for");
     if (!fieldId) {
-        log("Err", labelText, "Label does not have a 'for' attribute.");
+        log(failSilently ? "Info" : "Err", `Form - ${labelText}`, "Label does not have a 'for' attribute.");
         return null;
     }
 
     const field = document.getElementById(fieldId);
     if (!field) {
-        log("Err", labelText, `Field with id "${fieldId}" not found for label`);
+        log(failSilently ? "Info" : "Err", `Form - ${labelText}`, `Field with id "${fieldId}" not found for label`);
         return null;
     }
 
     return field;
 }
 
-function setInputValue(labelText, value) {
-    const input = findFieldElement(labelText);
+function setInputValue(labelText, value, failSilently = false) {
+    const input = findFieldElement(labelText, failSilently);
 
     if (!input || input.tagName.toLowerCase() !== "input") {
-        !input || log("Err", labelText, "Input field not found or invalid");
+        !input || log(failSilently ? "Info" : "Err", `Form - ${labelText}`, "Input field not found or invalid");
         return;
     }
 
-    log("Info", labelText, `Setting value to ${value}`);
+    log("Info", `Form - ${labelText}`, `Setting value to ${value}`);
     input.focus();
     input.value = value;
-    input.dispatchEvent(new Event("input", { bubbles: true }));
-    input.dispatchEvent(new Event("change", { bubbles: true }));
+    input.dispatchEvent(new Event("input", {bubbles: true}));
+    input.dispatchEvent(new Event("change", {bubbles: true}));
 }
 
-function setSelectValue(labelText, value) {
-    const select = findFieldElement(labelText);
+function setSelectValue(labelText, value, failSilently = false) {
+    const select = findFieldElement(labelText, failSilently);
 
     if (!select || select.tagName.toLowerCase() !== "select") {
-        !select || log("Err", labelText, "Select field not found or invalid");
+        !select || log(failSilently ? "Info" : "Err", `Form - ${labelText}`, "Select field not found or invalid");
         return;
     }
 
     const optionExists = Array.from(select.options).some(opt => opt.value === value);
     if (!optionExists) {
-        log("Err",labelText, `Option "${value}" not found in select`);
+        log(failSilently ? "Info" : "Err", `Form - ${labelText}`, `Option "${value}" not found in select`);
         return;
     }
 
-    log("Info", labelText, `Setting value to ${value}`);
+    log("Info", `Form - ${labelText}`, `Setting value to ${value}`);
     select.value = value;
-    select.dispatchEvent(new Event("input", { bubbles: true }));
-    select.dispatchEvent(new Event("change", { bubbles: true }));
+    select.dispatchEvent(new Event("input", {bubbles: true}));
+    select.dispatchEvent(new Event("change", {bubbles: true}));
 }
 
-function setCheckboxValue(labelText, isChecked) {
-    const checkbox = findFieldElement(labelText);
+function setCheckboxValue(labelText, isChecked, failSilently = false) {
+    const checkbox = findFieldElement(labelText, failSilently);
 
     if (!checkbox || checkbox.type !== "checkbox") {
-        !checkbox || log("Err",labelText,"Checkbox not found or invalid");
+        !checkbox || log(failSilently ? "Info" : "Err", `Form - ${labelText}`, "Checkbox not found or invalid");
         return;
     }
 
     if (checkbox.checked !== isChecked) {
-        log("Info", labelText, `Setting value to ${isChecked}`);
+        log("Info", `Form - ${labelText}`, `Setting value to ${isChecked}`);
         checkbox.click(); // simule un vrai clic utilisateur
     } else {
-        log("Info", labelText, `Already to ${isChecked}`);
+        log("Info", `Form - ${labelText}`, `Already to ${isChecked}`);
     }
 }
 
@@ -187,8 +185,7 @@ detectElement(SELECTOR_STEP_1_TICKETS, () => {
             } else {
                 log("Err", "Tickets", "Cannot add ticket to cart");
             }
-        }
-        else {
+        } else {
             log("Info", "Tickets", "No more ticket required");
         }
 
@@ -224,7 +221,7 @@ detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
     setInputValue("Prénom", "Geoffrey")
     setInputValue("Nom", "Berard")
     setInputValue("Email", "geoffrey.berard@gmail.com")
-    setInputValue("Confirmation Email", "geoffrey.berard@gmail.com")
+    setInputValue("Confirmation Email", "geoffrey.berard@gmail.com", true)
 
 
     clickButtonUntilStepChanges({
@@ -239,7 +236,7 @@ detectElement(SELECTOR_STEP_4_SUMMARY, () => {
     log("Info", "Summary", "Detected");
 
     detectElement(SELECTOR_STEP_4_PRICE, () => {
-        setCheckboxValue("J'ai compris que HelloAsso est", true)
+        setCheckboxValue("J'ai compris que HelloAsso", true)
         setCheckboxValue("J'accepte les", true)
     })
 });
