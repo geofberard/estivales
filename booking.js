@@ -1,22 +1,46 @@
-function log(message) {
-    console.log("Estivales - " + message)
+const LEVELS = {
+    Info: 'Info',
+    Warning: 'Warn',
+    Error: 'Err'
+};
+
+const PAD_LEVEL = 4;     // Pour aligner [Info], [Error], etc.
+const PAD_STEP = 7;     // Pour aligner les noms d'étapes
+
+function log(level, stepName, message) {
+    const levelStr = `[${level}]`.padEnd(PAD_LEVEL, ' ');
+    const stepStr = `${stepName}`.padEnd(PAD_STEP, ' ');
+    const finalMessage = `${levelStr} Estivales - ${stepStr} : ${message}`;
+
+    switch (level) {
+        case LEVELS.Info:
+            console.info(finalMessage);
+            break;
+        case LEVELS.Warning:
+            console.warn(finalMessage);
+            break;
+        case LEVELS.Error:
+            console.error(finalMessage);
+            break;
+        default:
+            console.log(finalMessage);
+    }
+}
+
+function sendNotification() {
+    chrome.runtime.sendMessage({ action: "send-notification" });
 }
 
 function detectElement(selector, callback) {
-    log('Looking for element ' + selector);
-    const element = document.querySelector(selector); 
+    const element = document.querySelector(selector);
     if (element) {
-      log('['+ selector + '] Already present !');
       callback(element);
       return;
     }
 
-    log('['+ selector + '] Searching ...');
-  
     const observer = new MutationObserver(() => {
       const newElement = document.querySelector(selector);
       if (newElement) {
-        log('['+ selector + '] Detected !');
         callback(newElement);
         observer.disconnect();
       }
@@ -25,44 +49,43 @@ function detectElement(selector, callback) {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-function priceTabAutomation() {
-    log("Etape Choix des billets");
+log("Initializing Plugin");
+
+let SELECTOR_STEP_1_TICKETS = '[data-testid="tab-prices"].NavStep.NavStep-Current';
+let SELECTOR_STEP_2_MEMBERS = '[data-testid="tab-members"].NavStep.NavStep-Current';
+let SELECTOR_STEP_3_CONTACT = '[data-testid="tab-payer"].NavStep.NavStep-Current';
+let SELECTOR_STEP_4_SUMMARY = '[data-testid="tab-summary"].NavStep.NavStep-Current';
+let SELECTOR_NEXT_BUTTON = '[data-test="button-next-step"]:not(.ValidatingButton)';
+
+log("Info", "Tickets", "Waiting");
+detectElement(SELECTOR_STEP_1_TICKETS, (addButton) => {
+    log("Info", "Tickets", "Detected");
     detectElement('[data-test="button-plus"]', (addButton) => {
-        log("Calleback Called");
         if(addButton) {
-            log("Generating Click");
+            log("Info", "Tickets", "Adding to cart");
             addButton.click();
-    
-            detectElement('[data-test="button-next-step"]:not(.ValidatingButton)', (nextStep) => {
+
+            detectElement(SELECTOR_NEXT_BUTTON, (nextStep) => {
+                log("Info", "Tickets", "Proceeding to next step");
                 nextStep.click();
             });
         }
     });
-}
-
-function sendNotification() {
-    log("Trying notification")
-    chrome.runtime.sendMessage({ action: "send-notification" });
-}
-
-log("Initializing Plugin");
-
-detectElement('[data-testid="tab-prices"].NavStep.NavStep-Current', (addButton) => {
-    sendNotification();
-    priceTabAutomation();
 });
 
-detectElement('[data-testid="tab-members"].NavStep.NavStep-Current', (addButton) => {
+log("Info", "Team", "Waiting");
+detectElement(SELECTOR_STEP_2_MEMBERS, (addButton) => {
+    log("Info", "Team", "Detected");
     sendNotification();
-    log("Etape Participants");
 });
 
-detectElement('[data-testid="tab-payer"].NavStep.NavStep-Current', (addButton) => {
-    sendNotification();
-    log("Etape Coordonnées");
+log("Info", "Contact", "Waiting");
+detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
+    log("Info", "Contact", "Detected");
+    sendNotification()
 });
 
-detectElement('[data-testid="tab-summary"].NavStep.NavStep-Current', (addButton) => {
-    sendNotification();
-    log("Etape Récapitulatif");
+log("Info", "Summary", "Waiting");
+detectElement(SELECTOR_STEP_4_SUMMARY, (addButton) => {
+    log("Info", "Summary", "Detected");
 });
