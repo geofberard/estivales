@@ -1,5 +1,5 @@
-function sendNotification() {
-    chrome.runtime.sendMessage({action: "send-notification"});
+function sendNotification(message) {
+    chrome.runtime.sendMessage({action: "send-notification", text: message});
 }
 
 let SELECTOR_STEP_1_TICKETS = '[data-testid="tab-prices"].NavStep.NavStep-Current';
@@ -52,7 +52,6 @@ detectElement(SELECTOR_STEP_2_MEMBERS, () => {
         currentStepSelector: SELECTOR_STEP_2_MEMBERS,
         buttonSelector: SELECTOR_NEXT_BUTTON
     });
-    sendNotification();
 });
 
 detectElement(SELECTOR_STEP_3_CONTACT, (addButton) => {
@@ -77,4 +76,6 @@ detectElement(SELECTOR_STEP_4_SUMMARY, () => {
         setCheckboxValue("J'ai compris que HelloAsso", true)
         setCheckboxValue("J'accepte les", true)
     })
+
+    sendNotification("C'est bon, il n'y a plus qu'a payer 💰");
 });
