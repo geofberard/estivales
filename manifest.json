@@ -6,10 +6,10 @@
   "permissions": ["scripting", "tabs", "notifications", "storage"],
   "host_permissions": ["https://www.helloasso.com/*"],
   "action": {
-    "default_title": "Activité Manuelle",
-    "default_popup": "popup.html"
+    "default_title": "Estivales Volley",
+    "default_popup": "popup/popup.html"
   },
-  "options_page": "options.html",
+  "options_page": "options/options.html",
   "content_scripts": [
     {
       "matches": ["https://www.helloasso.com/associations/*"],
