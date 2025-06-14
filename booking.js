@@ -46,7 +46,7 @@ readFromStorage(data => {
         log("Info", "Team", "Detected");
 
         setInputValue("Prénom", data[FIELDS.firstname.id])
-        setInputValue("Nom", data[FIELDS.lastName.id])
+        setInputValue("Nom", data[FIELDS.lastname.id])
         setInputValue("Poids", "75")
         setSelectValue("Catégorie d'age", "U13")
 
@@ -61,7 +61,7 @@ readFromStorage(data => {
         log("Info", "Contact", "Detected");
 
         setInputValue("Prénom", data[FIELDS.firstname.id])
-        setInputValue("Nom", data[FIELDS.lastName.id])
+        setInputValue("Nom", data[FIELDS.lastname.id])
         setInputValue("Email", data[FIELDS.email.id])
         setInputValue("Confirmation Email", data[FIELDS.email.id], true)
 
@@ -76,6 +76,7 @@ readFromStorage(data => {
         log("Info", "Summary", "Detected");
 
         detectElement(SELECTOR_STEP_4_PRICE, () => {
+            setCheckboxValue("J'accepte le document suivant", true)
             setCheckboxValue("J'ai compris que HelloAsso", true)
             setCheckboxValue("J'accepte les", true)
         })
