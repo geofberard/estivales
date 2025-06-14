@@ -6,9 +6,9 @@ function renderFormFields() {
     const isPlayerField = key => /^player\d/.test(key);
 
     // 1. Champs généraux
-    Object.entries(FIELDS).forEach(([key, { id, label }]) => {
+    Object.entries(FIELDS).forEach(([key, { id, label, details }]) => {
         if (!isPlayerField(key)) {
-            const field = createFormField(id, label);
+            const field = createFormField(id, label, details);
             container.appendChild(field);
         }
     });
@@ -22,9 +22,9 @@ function renderFormFields() {
         title.textContent = `Joueur·euse ${playerNum}`;
         playerSection.appendChild(title);
 
-        Object.entries(FIELDS).forEach(([key, { id, label }]) => {
+        Object.entries(FIELDS).forEach(([key, { id, label, details }]) => {
             if (key.startsWith(`player${playerNum}`)) {
-                const field = createFormField(id, label);
+                const field = createFormField(id, label, details);
                 playerSection.appendChild(field);
             }
         });
@@ -33,7 +33,7 @@ function renderFormFields() {
     });
 }
 
-function createFormField(id, label) {
+function createFormField(id, label, details) {
     const wrapper = document.createElement('div');
     wrapper.classList.add('form-field');
 
@@ -42,12 +42,17 @@ function createFormField(id, label) {
     labelEl.textContent = label;
     labelEl.classList.add('form-label');
 
+    const helpEl = document.createElement('span');
+    helpEl.classList.add('form-help');
+    helpEl.textContent = `(${details})`;
+
     const inputEl = document.createElement('input');
     inputEl.type = 'text';
     inputEl.id = id;
     inputEl.classList.add('form-input');
 
     wrapper.appendChild(labelEl);
+    if (details) labelEl.appendChild(helpEl);
     wrapper.appendChild(inputEl);
 
     return wrapper;

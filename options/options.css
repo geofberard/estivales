@@ -73,3 +73,8 @@ button:hover {
     margin-bottom: 0;
     color: #3f51b5;
 }
+
+.form-help {
+    color: #888;
+    margin-left: 5px;
+}
