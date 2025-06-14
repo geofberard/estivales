@@ -3,7 +3,7 @@ body {
 }
 
 .card {
-    max-width: 400px;
+    max-width: 500px;
     margin: 2rem auto;
     padding: 2rem;
     border-radius: 8px;
@@ -55,4 +55,21 @@ button {
 
 button:hover {
     background-color: #303f9f;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    border-radius: 6px;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h3 {
+    margin-top: 0;
+    margin-bottom: 0;
+    color: #3f51b5;
 }

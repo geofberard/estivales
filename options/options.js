@@ -1,29 +1,82 @@
-
-
-// Rendu des champs du formulaire
 function renderFormFields() {
     const container = document.getElementById('fields-container');
-    container.classList.add('form-container'); // Ajout de classe CSS pour le style général
+    container.classList.add('form-container');
 
-    ALL_FIELDS.forEach(({ id, label }) => {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('form-field'); // Style type Material UI field
+    const playerFields = [1, 2, 3];
+    const isPlayerField = key => /^player\d/.test(key);
 
-        const labelEl = document.createElement('label');
-        labelEl.setAttribute('for', id);
-        labelEl.textContent = label;
-        labelEl.classList.add('form-label');
+    // 1. Champs généraux
+    Object.entries(FIELDS).forEach(([key, { id, label }]) => {
+        if (!isPlayerField(key)) {
+            const field = createFormField(id, label);
+            container.appendChild(field);
+        }
+    });
 
-        const inputEl = document.createElement('input');
-        inputEl.type = 'text';
-        inputEl.id = id;
-        inputEl.classList.add('form-input');
+    // 2. Blocs joueurs
+    playerFields.forEach(playerNum => {
+        const playerSection = document.createElement('div');
+        playerSection.classList.add('form-section');
 
-        wrapper.appendChild(labelEl);
-        wrapper.appendChild(inputEl);
-        container.appendChild(wrapper);
+        const title = document.createElement('h3');
+        title.textContent = `Joueur·euse ${playerNum}`;
+        playerSection.appendChild(title);
+
+        Object.entries(FIELDS).forEach(([key, { id, label }]) => {
+            if (key.startsWith(`player${playerNum}`)) {
+                const field = createFormField(id, label);
+                playerSection.appendChild(field);
+            }
+        });
+
+        container.appendChild(playerSection);
     });
 }
+
+function createFormField(id, label) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('form-field');
+
+    const labelEl = document.createElement('label');
+    labelEl.setAttribute('for', id);
+    labelEl.textContent = label;
+    labelEl.classList.add('form-label');
+
+    const inputEl = document.createElement('input');
+    inputEl.type = 'text';
+    inputEl.id = id;
+    inputEl.classList.add('form-input');
+
+    wrapper.appendChild(labelEl);
+    wrapper.appendChild(inputEl);
+
+    return wrapper;
+}
+
+// // Rendu des champs du formulaire
+// function renderFormFields() {
+//     const container = document.getElementById('fields-container');
+//     container.classList.add('form-container'); // Ajout de classe CSS pour le style général
+//
+//     ALL_FIELDS.forEach(({ id, label }) => {
+//         const wrapper = document.createElement('div');
+//         wrapper.classList.add('form-field'); // Style type Material UI field
+//
+//         const labelEl = document.createElement('label');
+//         labelEl.setAttribute('for', id);
+//         labelEl.textContent = label;
+//         labelEl.classList.add('form-label');
+//
+//         const inputEl = document.createElement('input');
+//         inputEl.type = 'text';
+//         inputEl.id = id;
+//         inputEl.classList.add('form-input');
+//
+//         wrapper.appendChild(labelEl);
+//         wrapper.appendChild(inputEl);
+//         container.appendChild(wrapper);
+//     });
+// }
 
 // Form utils
 function getFormValues() {
