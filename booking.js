@@ -110,11 +110,11 @@ readFromStorage(data => {
                 detectElement(SELECTOR_CONTRIBUTION, () => {
                     setInputValue("votre soutien :", data[FIELDS.contribution.id])
                     clickButton("button-save")
-                    // clickButtonUntilStepChanges({
-                    //     currentStep: "Summary",
-                    //     currentStepSelector: SELECTOR_STEP_4_SUMMARY,
-                    //     buttonSelector: SELECTOR_NEXT_BUTTON
-                    // });
+                    clickButtonUntilStepChanges({
+                        currentStep: "Summary",
+                        currentStepSelector: SELECTOR_STEP_4_SUMMARY,
+                        buttonSelector: SELECTOR_NEXT_BUTTON
+                    });
                     sendNotification("C'est bon, il n'y a plus qu'a payer 💰");
                 })
             })
