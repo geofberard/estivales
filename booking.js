@@ -7,6 +7,7 @@ let SELECTOR_STEP_2_MEMBERS = '[data-testid="tab-members"].NavStep.NavStep-Curre
 let SELECTOR_STEP_3_CONTACT = '[data-testid="tab-payer"].NavStep.NavStep-Current';
 let SELECTOR_STEP_4_SUMMARY = '[data-testid="tab-summary"].NavStep.NavStep-Current';
 let SELECTOR_STEP_4_PRICE = '.price-container__price';
+let SELECTOR_CONTRIBUTION_BUTTON = '[data-testid="button-change-contribution"]';
 let SELECTOR_CONTRIBUTION = '.contribution-modal-modify';
 let SELECTOR_NEXT_BUTTON = '[data-test="button-next-step"]:not(.ValidatingButton):not([disabled])';
 let SELECTOR_TICKET_QUANTITY = '[data-test="input-quantity"]';
@@ -98,16 +99,18 @@ readFromStorage(data => {
             setCheckboxValue("J'accepte le document suivant", true)
             setCheckboxValue("J'ai compris que HelloAsso", true)
             setCheckboxValue("J'accepte les", true)
-            clickButton("button-change-contribution")
-            detectElement(SELECTOR_CONTRIBUTION, () => {
-                setInputValue("votre soutien :", data[FIELDS.contribution.id])
-                clickButton("button-save")
-                // clickButtonUntilStepChanges({
-                //     currentStep: "Summary",
-                //     currentStepSelector: SELECTOR_STEP_4_SUMMARY,
-                //     buttonSelector: SELECTOR_NEXT_BUTTON
-                // });
-                sendNotification("C'est bon, il n'y a plus qu'a payer 💰");
+            detectElement(SELECTOR_CONTRIBUTION_BUTTON, () => {
+                clickButton("button-change-contribution")
+                detectElement(SELECTOR_CONTRIBUTION, () => {
+                    setInputValue("votre soutien :", data[FIELDS.contribution.id])
+                    clickButton("button-save")
+                    // clickButtonUntilStepChanges({
+                    //     currentStep: "Summary",
+                    //     currentStepSelector: SELECTOR_STEP_4_SUMMARY,
+                    //     buttonSelector: SELECTOR_NEXT_BUTTON
+                    // });
+                    sendNotification("C'est bon, il n'y a plus qu'a payer 💰");
+                })
             })
         })
 
