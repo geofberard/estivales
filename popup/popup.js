@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-chrome.storage.local.get({ USER_NAME: 'john' }, (result) => {
-    const userName = result.USER_NAME;
+chrome.storage.local.get({ firstname: 'john' }, (result) => {
+    const userName = result.firstname;
     document.getElementById('greeting').textContent = `Bonjour ${userName}`;
 });
