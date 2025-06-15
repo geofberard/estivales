@@ -52,23 +52,23 @@ readFromStorage(data => {
         setInputValue("NOM DE L'EQUIPE", data[FIELDS.teamName.id])
         setInputValue("N° de mobile pour pouvoir", data[FIELDS.phone.id])
 
-        setInputValue("1 - NOM PRENOM", data[FIELDS.player1Lastname.id] + " " + data[FIELDS.player1Firstname.id])
-        setSelectValue("1 - NIVEAU", data[FIELDS.player1Level.id])
-        setInputValue("1 - VILLE", data[FIELDS.player1City.id])
-        setInputValue("1 - DEPARTEMENT", data[FIELDS.player1Zip.id])
-        setInputValue("1 - DATE DE NAISSANCE", data[FIELDS.player1Birthday.id])
+        setInputValue(["JOUEUSE 1 - NOM PRENOM", "JOUEUR 1 - NOM PRENOM"], data[FIELDS.player1Lastname.id] + " " + data[FIELDS.player1Firstname.id])
+        setSelectValue(["JOUEUSE 1 - NIVEAU", "JOUEUR 1 - NIVEAU"], data[FIELDS.player1Level.id])
+        setInputValue(["JOUEUSE 1 - VILLE", "JOUEUR 1 - VILLE"], data[FIELDS.player1City.id])
+        setInputValue(["JOUEUSE 1 - DEPARTEMENT", "JOUEUR 1 - DEPARTEMENT"], data[FIELDS.player1Zip.id])
+        setInputValue(["JOUEUSE 1 - DATE DE NAISSANCE", "JOUEUR 1 - DATE DE NAISSANCE"], data[FIELDS.player1Birthday.id])
 
-        setInputValue("2 - NOM PRENOM", data[FIELDS.player2Lastname.id] + " " + data[FIELDS.player2Firstname.id])
-        setSelectValue("2 - NIVEAU", data[FIELDS.player2Level.id])
-        setInputValue("2 - VILLE", data[FIELDS.player2City.id])
-        setInputValue("2 - DEPARTEMENT", data[FIELDS.player2Zip.id])
-        setInputValue("2 - DATE DE NAISSANCE", data[FIELDS.player2Birthday.id])
+        setInputValue(["JOUEUSE 2 - NOM PRENOM", "JOUEUR 2 - NOM PRENOM"], data[FIELDS.player2Lastname.id] + " " + data[FIELDS.player2Firstname.id])
+        setSelectValue(["JOUEUSE 2 - NIVEAU", "JOUEUR 2 - NIVEAU"], data[FIELDS.player2Level.id])
+        setInputValue(["JOUEUSE 2 - VILLE", "JOUEUR 2 - VILLE"], data[FIELDS.player2City.id])
+        setInputValue(["JOUEUSE 2 - DEPARTEMENT", "JOUEUR 2 - DEPARTEMENT"], data[FIELDS.player2Zip.id])
+        setInputValue(["JOUEUSE 2 - DATE DE NAISSANCE", "JOUEUR 2 - DATE DE NAISSANCE"], data[FIELDS.player2Birthday.id])
 
-        setInputValue("3 - NOM PRENOM", data[FIELDS.player3Lastname.id] + " " + data[FIELDS.player3Firstname.id])
-        setSelectValue("3 - NIVEAU", data[FIELDS.player3Level.id])
-        setInputValue("3 - VILLE", data[FIELDS.player3City.id])
-        setInputValue("3 - DEPARTEMENT", data[FIELDS.player3Zip.id])
-        setInputValue("3 - DATE DE NAISSANCE", data[FIELDS.player3Birthday.id])
+        setInputValue(["JOUEUSE 3 - NOM PRENOM", "JOUEUR 3 - NOM PRENOM"], data[FIELDS.player3Lastname.id] + " " + data[FIELDS.player3Firstname.id])
+        setSelectValue(["JOUEUSE 3 - NIVEAU", "JOUEUR 3 - NIVEAU"], data[FIELDS.player3Level.id])
+        setInputValue(["JOUEUSE 3 - VILLE", "JOUEUR 3 - VILLE"], data[FIELDS.player3City.id])
+        setInputValue(["JOUEUSE 3 - DEPARTEMENT", "JOUEUR 3 - DEPARTEMENT"], data[FIELDS.player3Zip.id])
+        setInputValue(["JOUEUSE 3 - DATE DE NAISSANCE", "JOUEUR 3 - DATE DE NAISSANCE"], data[FIELDS.player3Birthday.id])
 
         clickButtonUntilStepChanges({
             currentStep: "Team",
