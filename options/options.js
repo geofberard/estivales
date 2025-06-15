@@ -2,7 +2,7 @@ function renderFormFields() {
     const container = document.getElementById('fields-container');
     container.classList.add('form-container');
 
-    const playerFields = [1, 2, 3];
+    const playerFields = [1, 2, 3, 4];
     const isPlayerField = key => /^player\d/.test(key);
 
     // 1. Champs généraux

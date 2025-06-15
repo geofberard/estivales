@@ -70,6 +70,12 @@ readFromStorage(data => {
         setInputValue(["JOUEUSE 3 - DEPARTEMENT", "JOUEUR 3 - DEPARTEMENT"], data[FIELDS.player3Zip.id])
         setInputValue(["JOUEUSE 3 - DATE DE NAISSANCE", "JOUEUR 3 - DATE DE NAISSANCE"], data[FIELDS.player3Birthday.id])
 
+        setInputValue(["REMPLACANTE EVENTUELLE - NOM PRENOM", "REMPLACANT EVENTUEL - NOM PRENOM"], data[FIELDS.player4Lastname.id] + " " + data[FIELDS.player4Firstname.id])
+        setSelectValue(["REMPLACANTE - NIVEAU", "REMPLACANT - NIVEAU"], data[FIELDS.player4Level.id])
+        setInputValue(["REMPLACANTE - VILLE", "REMPLACANT - VILLE"], data[FIELDS.player4City.id])
+        setInputValue(["REMPLACANTE - DEPARTEMENT", "REMPLACANT - DEPARTEMENT"], data[FIELDS.player4Zip.id])
+        setInputValue(["REMPLACANTE - DATE DE NAISSANCE", "REMPLACANT - DATE DE NAISSANCE"], data[FIELDS.player4Birthday.id])
+
         clickButtonUntilStepChanges({
             currentStep: "Team",
             currentStepSelector: SELECTOR_STEP_2_MEMBERS,
